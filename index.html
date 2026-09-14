@@ -5,18 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Earning</title>
 
-  <script src="https://telegram.org/js/telegram-web-app.js"></script
-                                                              
-                                            <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-  import { firebaseConfig } from "./firebase-config.js";
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+    import { firebaseConfig } from "./firebase-config.js";
 
-  window.db = db;
-</script>                >
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.db = db;
+  </script>
 
   <style>
     * {
