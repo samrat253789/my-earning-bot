@@ -363,11 +363,17 @@ if (userDoc.exists()) {
 
       await addDoc(collection(db, "earnings"), {
         telegramId: String(user.id),
+       
         amount: 5,
         type: "ad",
         status: "valid",
         createdAt: serverTimestamp()
       });
+const updatedDoc = await getDoc(userRef);
+const updatedData = updatedDoc.data();
+document.getElementById("todayEarnings").textContent = "Today: ৳" + Number(updatedData.todayEarnings || 0).toFixed(2);
+
+alert("Test Advertisement Completed! Reward: ৳5");
 
       alert("Test Advertisement Completed! Reward: ৳5");
     } catch (error) {
