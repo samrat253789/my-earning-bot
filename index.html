@@ -341,11 +341,41 @@ if (userDoc.exists()) {
         (user.first_name || "U").charAt(0).toUpperCase();
     }
 
-    function startTask() {
+    async function startTask() {
   alert("Test Advertisement Started. Please wait 10 seconds.");
 
-  setTimeout(() => {
-    alert("Test Advertisement Completed! Reward: ৳5");
+  setTimeout(async () => {
+    try {
+      const user = tg.initDataUnsafe?.user;
+
+      if (!user) {
+        alert("Telegram user not found.");
+        return;
+      }
+
+      const userRef = doc(db, "users", String(user.id));
+
+      await updateDoc(userRef, {
+        balance: increment(5),
+        totalEarnings: increment(5),
+        todayEarnings: increment(5),
+        totalAdsWatched: increment(1),
+        adsWatchedToday: increment(1)
+      });
+
+      await addDoc(collection(db, "earnings"), {
+        telegramId: String(user.id),
+        amount: 5,
+        type: "ad",
+        status: "valid",
+        createdAt: serverTimestamp()
+      });
+
+      alert("Test Advertisement Completed! Reward: ৳5");
+    } catch (error) {
+      console.error(error);
+      alert("Reward could not be added.");
+    }
   }, 10000);
 }
 
