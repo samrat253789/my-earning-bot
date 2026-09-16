@@ -38,17 +38,14 @@
         updatedAt: serverTimestamp()
       },
       { merge: true }
-    );
- await new Promise(resolve => {
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", resolve, { once: true });
-  } else {
-    resolve();
-  }
-});
+    if (userDoc.exists()) {
+  const data = userDoc.data();
+  const balanceElement = document.getElementById("balance");
 
-const userDoc = await getDoc(
-  doc(db, "users", String(user.id))
+  if (balanceElement) {
+    balanceElement.textContent = "৳" + Number(data.balance || 0).toFixed(2);
+  }
+}
 );
 
 if (userDoc.exists()) {
