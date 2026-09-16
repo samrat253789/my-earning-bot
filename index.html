@@ -338,8 +338,12 @@ if (userDoc.exists()) {
     }
 
     function startTask() {
-      alert("Advertisement task will be connected soon.");
-    }
+  alert("Test Advertisement Started. Please wait 10 seconds.");
+
+  setTimeout(() => {
+    alert("Test Advertisement Completed! Reward: ৳5");
+  }, 10000);
+}
 
     function openReferral() {
       alert("Referral system will be connected soon.");
