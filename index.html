@@ -39,17 +39,18 @@
       },
       { merge: true }
     );
+  document.addEventListener("DOMContentLoaded", async () => {
   const userDoc = await getDoc(
-  doc(db, "users", String(user.id))
-);
+    doc(db, "users", String(user.id))
+  );
 
-document.addEventListener("DOMContentLoaded", () => {
   if (userDoc.exists()) {
     const data = userDoc.data();
     const balanceElement = document.getElementById("balance");
 
     if (balanceElement) {
-      balanceElement.textContent = "৳" + (data.balance || 0).toFixed(2);
+      balanceElement.textContent =
+        "৳" + Number(data.balance || 0).toFixed(2);
     }
   }
 });
