@@ -395,8 +395,17 @@ alert("Test Advertisement Completed! Reward: ৳5");
 }
 
     function openReferral() {
-      alert("Referral system will be connected soon.");
-    }
+  const user = tg.initDataUnsafe?.user;
+
+  if (!user) {
+    alert("Telegram user not found.");
+    return;
+  }
+
+  const referralLink = "https://t.me/myearning253789_bot?start=" + user.id;
+
+  alert("Your Referral Link:\n\n" + referralLink);
+}
 
     function openWallet() {
       alert("Wallet system will be connected soon.");
