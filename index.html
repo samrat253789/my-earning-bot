@@ -61,10 +61,15 @@ window.getDoc = getDoc;
 if (userDoc.exists()) {
   const data = userDoc.data();
   const balanceElement = document.getElementById("balance");
+const todayElement = document.getElementById("todayEarnings");
 
-  if (balanceElement) {
-    balanceElement.textContent = "৳" + Number(data.balance || 0).toFixed(2);
-  }
+if (balanceElement) {
+  balanceElement.textContent = "৳" + Number(data.balance || 0).toFixed(2);
+}
+
+if (todayElement) {
+  todayElement.textContent = "Today: ৳" + Number(data.todayEarnings || 0).toFixed(2);
+}
 }
 </script>
 
