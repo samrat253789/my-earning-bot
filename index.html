@@ -43,6 +43,7 @@ window.getDoc = getDoc;
   tg.ready();
 
   const user = tg.initDataUnsafe?.user;
+const referralId = tg.initDataUnsafe?.start_param || "";
 
   await setDoc(
   doc(db, "users", String(user.id)),
