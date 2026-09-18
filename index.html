@@ -434,6 +434,7 @@ alert("Test Advertisement Completed! Reward: ৳5");
 }
 
     function openReferral() {
+  
   const user = tg.initDataUnsafe?.user;
 
   if (!user) {
@@ -448,8 +449,62 @@ alert("Test Advertisement Completed! Reward: ৳5");
 
     function openWallet() {
       alert("Wallet system will be connected soon.");
+    } 
+    async function loadEarningsHistory() {
+  const user = tg.initDataUnsafe?.user;
+  const historyElement = document.getElementById("earningsHistory");
+
+  if (!user || !historyElement) return;
+
+  try {
+    const q = query(
+      collection(db, "earnings"),
+      where("telegramId", "==", String(user.id)),
+      limit(10)
+    );
+
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      historyElement.innerHTML = `
+        <div class="task">
+          No earnings history yet.
+        </div>
+      `;
+      return;
     }
-  </script>
+
+    const earnings = [];
+
+    snapshot.forEach((docSnap) => {
+      earnings.push(docSnap.data());
+    });
+
+    earnings.reverse();
+
+    historyElement.innerHTML = earnings.map((earning) => `
+      <div class="task">
+        <div class="task-left">
+          <div>
+            <div class="task-name">🎬 Advertisement</div>
+            <div>Reward: ৳${Number(earning.amount || 0).toFixed(2)}</div>
+          </div>
+        </div>
+      </div>
+    `).join("");
+
+  } catch (error) {
+    console.error(error);
+    historyElement.innerHTML = `
+      <div class="task">
+        Unable to load earnings history.
+      </div>
+    `;
+  }
+}
+
+loadEarningsHistory();
+  </script> 
 
 </body>
 </ht
