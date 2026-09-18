@@ -447,9 +447,28 @@ alert("Test Advertisement Completed! Reward: ৳5");
   alert("Your Referral Link:\n\n" + referralLink);
 }
 
-    function openWallet() {
-      alert("Wallet system coming soon.");
-    } 
+   function openWallet() {
+  const walletPage = document.getElementById("walletPage");
+  const user = tg.initDataUnsafe?.user;
+
+  if (!user || !walletPage) {
+    alert("Telegram user not found.");
+    return;
+  }
+
+  walletPage.style.display = "block";
+
+  const userRef = doc(db, "users", String(user.id));
+
+  getDoc(userRef).then((userDoc) => {
+    if (userDoc.exists()) {
+      const data = userDoc.data();
+
+      document.getElementById("walletBalance").textContent =
+        "৳" + Number(data.balance || 0).toFixed(2);
+    }
+  });
+}
     async function loadEarningsHistory() {
   const user = tg.initDataUnsafe?.user;
   const historyElement = document.getElementById("earningsHistory");
@@ -505,16 +524,38 @@ alert("Test Advertisement Completed! Reward: ৳5");
 
 window.addEventListener("DOMContentLoaded", loadEarningsHistory);
   </script> 
-
-</body>
-</ht
-     <div id="walletPage" style="display:none;">
+<div id="walletPage" style="display:none;">
   <h2>💰 Wallet</h2>
-  <p>Available Balance: <strong>৳0.00</strong></p>
-  <button onclick="alert('Withdrawal system will be connected soon.')">
+
+  <p>Available Balance: <strong id="walletBalance">৳0.00</strong></p>
+
+  <input
+    type="number"
+    id="withdrawAmount"
+    placeholder="Enter amount"
+    min="1"
+  >
+
+  <select id="paymentMethod">
+    <option value="">Select Payment Method</option>
+    <option value="bkash">bKash</option>
+    <option value="nagad">Nagad</option>
+    <option value="rocket">Rocket</option>
+  </select>
+
+  <input
+    type="text"
+    id="paymentNumber"
+    placeholder="Enter payment number"
+  >
+
+  <button onclick="submitWithdrawal()">
     Withdraw
   </button>
-</div>ml>
+</div>
+</body>
+</ht
+ 
 <script>
   console.log("Firebase connected successfully");
 </script>
