@@ -376,7 +376,16 @@ if (todayElement) {
 
 const userDoc = await getDoc(userRef);
 const userData = userDoc.data();
+const today = new Date().toLocaleDateString("en-CA");
 
+if (userData.lastAdDate !== today) {
+  await updateDoc(userRef, {
+    adsWatchedToday: 0,
+    lastAdDate: today
+  });
+
+  userData.adsWatchedToday = 0;
+}
 
 if (Number(userData.adsWatchedToday || 0) >= 1) {
   alert("আজকের Ad limit শেষ। আগামীকাল আবার চেষ্টা করুন।");
