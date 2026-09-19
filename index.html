@@ -648,30 +648,30 @@ window.addEventListener("DOMContentLoaded", loadEarningsHistory);
     </div>
   </div>
 
-  <label>Deposit Amount</label>
+  <label>জমার পরিমাণ</label>
   <input
     type="number"
     id="depositAmount"
-    placeholder="Enter deposit amount"
+    placeholder="জমার পরিমাণ লিখুন"
     min="1"
   >
 
-  <label>Payment Method</label>
+  <label>পেমেন্টের মাধ্যম</label>
   <select id="depositMethod">
-    <option value="">Select Payment Method</option>
+    <option value="">পেমেন্টের মাধ্যম নির্বাচন করুন</option>
     <option value="bkash">bKash</option>
     <option value="nagad">Nagad</option>
     <option value="rocket">Rocket</option>
   </select>
 
-  <label>Transaction ID</label>
+  <label>ট্রানজেকশন আইডি</label>
   <input
     type="text"
     id="depositTransactionId"
-    placeholder="Enter Transaction ID"
+    placeholder="ট্রানজেকশন আইডি লিখুন"
   >
-
-  <label>Slip / Screenshot</label>
+<label>পেমেন্টের স্লিপ / স্ক্রিনশট</label>
+  
   <input
     type="file"
     id="depositSlip"
@@ -683,7 +683,7 @@ window.addEventListener("DOMContentLoaded", loadEarningsHistory);
     onclick="submitDeposit()"
     style="margin-top:15px;"
   >
-    Submit Deposit
+    জমা দিন
   </button>
 
   <button
@@ -691,7 +691,7 @@ window.addEventListener("DOMContentLoaded", loadEarningsHistory);
     onclick="closeDeposit()"
     style="margin-top:10px;"
   >
-    Back
+    ফিরে যান
   </button>
 
 </div>
