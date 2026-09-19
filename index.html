@@ -521,7 +521,79 @@ alert("Test Advertisement Completed! Reward: ৳5");
     `;
   }
 }
+window.submitWithdrawal = async function () {
+  const user = tg.initDataUnsafe?.user;
 
+  if (!user) {
+    alert("Telegram user not found.");
+    return;
+  }
+
+  const amount = Number(document.getElementById("withdrawAmount").value);
+  const method = document.getElementById("paymentMethod").value;
+  const number = document.getElementById("paymentNumber").value.trim();
+
+  if (!amount || amount < 50) {
+    alert("Minimum withdrawal is ৳50.");
+    return;
+  }
+
+  if (!method) {
+    alert("Please select a payment method.");
+    return;
+  }
+
+  if (!number) {
+    alert("Please enter your payment number.");
+    return;
+  }
+
+  try {
+    const userRef = doc(db, "users", String(user.id));
+    const userDoc = await getDoc(userRef);
+
+    if (!userDoc.exists()) {
+      alert("User account not found.");
+      return;
+    }
+
+    const data = userDoc.data();
+    const balance = Number(data.balance || 0);
+
+    if (amount > balance) {
+      alert("Insufficient balance.");
+      return;
+    }
+
+    await updateDoc(userRef, {
+      balance: increment(-amount),
+      totalWithdrawn: increment(amount)
+    });
+
+    await addDoc(collection(db, "withdrawals"), {
+      telegramId: String(user.id),
+      amount: amount,
+      fee: 0,
+      netAmount: amount,
+      paymentMethod: method,
+      paymentNumber: number,
+      status: "pending",
+      createdAt: serverTimestamp()
+    });
+
+    document.getElementById("walletBalance").textContent =
+      "৳" + (balance - amount).toFixed(2);
+
+    document.getElementById("withdrawAmount").value = "";
+    document.getElementById("paymentMethod").value = "";
+    document.getElementById("paymentNumber").value = "";
+
+    alert("Withdrawal request submitted successfully.");
+  } catch (error) {
+    console.error(error);
+    alert("Withdrawal request failed.");
+  }
+};
 window.addEventListener("DOMContentLoaded", loadEarningsHistory);
   </script> 
 <div id="walletPage" style="display:none; padding-bottom:100px;">
