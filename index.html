@@ -636,6 +636,93 @@ window.addEventListener("DOMContentLoaded", loadEarningsHistory);
     Withdraw
   </button>
 </div>
+<!-- Deposit Page -->
+<div id="depositPage" style="display:none; padding:20px; padding-bottom:100px;">
+
+  <h2>💳 Deposit</h2>
+
+  <div class="task">
+    <div>
+      <div class="task-name">📅 Date & Time</div>
+      <div id="depositDateTime">--</div>
+    </div>
+  </div>
+
+  <label>Deposit Amount</label>
+  <input
+    type="number"
+    id="depositAmount"
+    placeholder="Enter deposit amount"
+    min="1"
+  >
+
+  <label>Payment Method</label>
+  <select id="depositMethod">
+    <option value="">Select Payment Method</option>
+    <option value="bkash">bKash</option>
+    <option value="nagad">Nagad</option>
+    <option value="rocket">Rocket</option>
+  </select>
+
+  <label>Transaction ID</label>
+  <input
+    type="text"
+    id="depositTransactionId"
+    placeholder="Enter Transaction ID"
+  >
+
+  <label>Slip / Screenshot</label>
+  <input
+    type="file"
+    id="depositSlip"
+    accept="image/*"
+  >
+
+  <button
+    class="start-btn"
+    onclick="submitDeposit()"
+    style="margin-top:15px;"
+  >
+    Submit Deposit
+  </button>
+
+  <button
+    class="start-btn"
+    onclick="closeDeposit()"
+    style="margin-top:10px;"
+  >
+    Back
+  </button>
+
+</div>
+
+<script>
+function openDeposit() {
+  const depositPage = document.getElementById("depositPage");
+
+  if (!depositPage) return;
+
+  depositPage.style.display = "block";
+
+  const now = new Date();
+
+  document.getElementById("depositDateTime").textContent =
+    now.toLocaleDateString() + " " +
+    now.toLocaleTimeString();
+}
+
+function closeDeposit() {
+  const depositPage = document.getElementById("depositPage");
+
+  if (depositPage) {
+    depositPage.style.display = "none";
+  }
+}
+
+function submitDeposit() {
+  alert("Deposit system is ready. Payment verification will be added next.");
+}
+</script>
 </body>
 </ht
  
