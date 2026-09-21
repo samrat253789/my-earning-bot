@@ -719,7 +719,7 @@ function closeDeposit() {
   }
 }
 
-function submitDeposit() {
+window.submitDeposit = function() {
   const tg = window.Telegram.WebApp;
   const user = tg.initDataUnsafe?.user;
 
