@@ -720,6 +720,68 @@ function closeDeposit() {
 }
 
 function submitDeposit() {
+  const tg = window.Telegram.WebApp;
+  const user = tg.initDataUnsafe?.user;
+
+  const amount = Number(document.getElementById("depositAmount").value);
+  const method = document.getElementById("depositMethod").value;
+  const transactionId = document.getElementById("depositTransactionId").value.trim();
+  const slip = document.getElementById("depositSlip").files[0];
+
+  if (!user) {
+    alert("Telegram user পাওয়া যায়নি।");
+    return;
+  }
+
+  if (!amount || amount < 1) {
+    alert("দয়া করে জমার পরিমাণ লিখুন।");
+    return;
+  }
+
+  if (!method) {
+    alert("দয়া করে পেমেন্টের মাধ্যম নির্বাচন করুন।");
+    return;
+  }
+
+  if (!transactionId) {
+    alert("দয়া করে ট্রানজেকশন আইডি লিখুন।");
+    return;
+  }
+
+  if (!slip) {
+    alert("দয়া করে পেমেন্টের স্লিপ / স্ক্রিনশট দিন।");
+    return;
+  }
+
+  const db = window.db;
+
+  window.addDoc(
+    window.collection(db, "deposits"),
+    {
+      telegramId: String(user.id),
+      name: [user.first_name, user.last_name].filter(Boolean).join(" "),
+      username: user.username || "",
+      amount: amount,
+      paymentMethod: method,
+      transactionId: transactionId,
+      slipFileName: slip.name,
+      status: "pending",
+      createdAt: window.serverTimestamp()
+    }
+  )
+  .then(() => {
+    alert("আপনার Deposit Request সফলভাবে জমা হয়েছে।\n\nStatus: Pending\nAdmin যাচাই করার পর Balance যোগ হবে।");
+
+    document.getElementById("depositAmount").value = "";
+    document.getElementById("depositMethod").value = "";
+    document.getElementById("depositTransactionId").value = "";
+    document.getElementById("depositSlip").value = "";
+  })
+  .catch((error) => {
+    console.error(error);
+    alert("Deposit Request জমা দেওয়া যায়নি।");
+  });
+}
   alert("Deposit system is ready. Payment verification will be added next.");
 }
 </script>
