@@ -639,11 +639,11 @@ window.addEventListener("DOMContentLoaded", loadEarningsHistory);
 <!-- Deposit Page -->
 <div id="depositPage" style="display:none; padding:20px; padding-bottom:100px;">
 
-  <h2>💳 Deposit</h2>
+  <h2>💳 টাকা জমা দিন</h2>
 
   <div class="task">
     <div>
-      <div class="task-name">📅 Date & Time</div>
+      <div class="task-name">📅 তারিখ ও সময়</div>
       <div id="depositDateTime">--</div>
     </div>
   </div>
@@ -670,8 +670,8 @@ window.addEventListener("DOMContentLoaded", loadEarningsHistory);
     id="depositTransactionId"
     placeholder="ট্রানজেকশন আইডি লিখুন"
   >
-<label>পেমেন্টের স্লিপ / স্ক্রিনশট</label>
-  
+
+  <label>পেমেন্টের স্লিপ / স্ক্রিনশট</label>
   <input
     type="file"
     id="depositSlip"
@@ -679,16 +679,16 @@ window.addEventListener("DOMContentLoaded", loadEarningsHistory);
   >
 
   <button
-  class="start-btn"
-  onclick="window.submitDeposit()"
-  style="margin-top:15px;"
->
-  জমা দিন
-</button>
+    class="start-btn"
+    onclick="window.submitDeposit()"
+    style="margin-top:15px;"
+  >
+    জমা দিন
+  </button>
 
   <button
     class="start-btn"
-    onclick="closeDeposit()"
+    onclick="window.closeDeposit()"
     style="margin-top:10px;"
   >
     ফিরে যান
