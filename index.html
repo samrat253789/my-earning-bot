@@ -693,10 +693,112 @@ window.addEventListener("DOMContentLoaded", loadEarningsHistory);
   >
     ফিরে যান
   </button>
+<!-- Deposit History -->
+<div class="section-title" style="margin-top:25px;">
+  📜 Deposit History
+</div>
 
+<div id="depositHistory">
+  <div class="task">
+    Deposit history loading...
+  </div>
+</div>
 </div>
 
 <script>
+ async function loadDepositHistory() {
+
+  const user = window.Telegram.WebApp.initDataUnsafe?.user;
+  const historyElement = document.getElementById("depositHistory");
+
+  if (!user || !historyElement) return;
+
+  try {
+
+    const q = window.query(
+      window.collection(window.db, "deposits"),
+      window.where("telegramId", "==", String(user.id)),
+      window.limit(20)
+    );
+
+    const snapshot = await window.getDocs(q);
+
+    if (snapshot.empty) {
+      historyElement.innerHTML = `
+        <div class="task">
+          কোনো Deposit History নেই।
+        </div>
+      `;
+      return;
+    }
+
+    const deposits = [];
+
+    snapshot.forEach((depositDoc) => {
+      deposits.push(depositDoc.data());
+    });
+
+    deposits.reverse();
+
+    historyElement.innerHTML = deposits.map((deposit) => {
+
+      let statusText = "🟡 Pending";
+
+      if (deposit.status === "approved") {
+        statusText = "🟢 Approved";
+      }
+
+      if (deposit.status === "rejected") {
+        statusText = "🔴 Rejected";
+      }
+
+      let dateText = "--";
+
+      if (deposit.createdAt && deposit.createdAt.toDate) {
+        dateText = deposit.createdAt.toDate().toLocaleString();
+      }
+
+      return `
+        <div class="task" style="display:block; margin-bottom:10px;">
+
+          <div class="task-name">
+            💰 Amount: ৳${Number(deposit.amount || 0).toFixed(2)}
+          </div>
+
+          <div style="margin-top:6px;">
+            💳 Method: ${deposit.paymentMethod || ""}
+          </div>
+
+          <div style="margin-top:6px;">
+            🔖 Transaction ID: ${deposit.transactionId || ""}
+          </div>
+
+          <div style="margin-top:6px;">
+            📊 Status: ${statusText}
+          </div>
+
+          <div style="margin-top:6px; color:#9ba5bd;">
+            📅 ${dateText}
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+
+  } catch (error) {
+
+    console.error(error);
+
+    historyElement.innerHTML = `
+      <div class="task">
+        Deposit History load করা যায়নি।
+      </div>
+    `;
+  }
+}
+
+window.loadDepositHistory = loadDepositHistory; 
 function closeDeposit() {
   const depositPage = document.getElementById("depositPage");
 
