@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Admin Panel</title>
+
+  <script src="https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #0b1020;
+      color: white;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: #151e35;
+      border: 1px solid #263454;
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 15px;
+    }
+
+    .amount {
+      font-size: 22px;
+      font-weight: bold;
+      color: #20d46b;
+      margin-bottom: 10px;
+    }
+
+    .info {
+      margin: 6px 0;
+      color: #c8d0e0;
+    }
+
+    button {
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-right: 8px;
+      margin-top: 10px;
+    }
+
+    .approve {
+      background: #20d46b;
+      color: #06130b;
+    }
+
+    .reject {
+      background: #ff4d5a;
+      color: white;
+    }
+
+    #message {
+      margin-bottom: 15px;
+      color: #20d46b;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>🛠️ Admin Panel</h1>
+
+  <div id="message"></div>
+
+  <h2>💳 Pending Deposits</h2>
+
+  <div id="depositList">
+    Loading...
+  </div>
+
+</div>
+
+<script type="module">
+
+  import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+  import {
+    getFirestore,
+    collection,
+    getDocs,
+    query,
+    where,
+    orderBy,
+    doc,
+    updateDoc,
+    getDoc,
+    increment
+  }
+  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+  import { firebaseConfig }
+    from "./firebase-config.js";
+
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+
+  async function loadDeposits() {
+
+    const depositList =
+      document.getElementById("depositList");
+
+    try {
+
+      const q = query(
+        collection(db, "deposits"),
+        where("status", "==", "pending")
+      );
+
+      const snapshot = await getDocs(q);
+
+      if (snapshot.empty) {
+
+        depositList.innerHTML =
+          "<p>কোনো Pending Deposit নেই।</p>";
+
+        return;
+      }
+
+
+      depositList.innerHTML = "";
+
+
+      snapshot.forEach((depositDoc) => {
+
+        const data = depositDoc.data();
+
+        const card =
+          document.createElement("div");
+
+        card.className = "card";
+
+
+        card.innerHTML = `
+
+          <div class="amount">
+            ৳${Number(data.amount || 0).toFixed(2)}
+          </div>
+
+          <div class="info">
+            👤 User ID:
+            ${data.telegramId || ""}
+          </div>
+
+          <div class="info">
+            👨‍💼 Name:
+            ${data.name || ""}
+          </div>
+
+          <div class="info">
+            💳 Method:
+            ${data.paymentMethod || ""}
+          </div>
+
+          <div class="info">
+            🔖 Transaction ID:
+            ${data.transactionId || ""}
+          </div>
+
+          <div class="info">
+            📷 Slip:
+            ${data.slipFileName || ""}
+          </div>
+
+          <button
+            class="approve"
+            onclick="approveDeposit('${depositDoc.id}')">
+            ✅ Approve
+          </button>
+
+          <button
+            class="reject"
+            onclick="rejectDeposit('${depositDoc.id}')">
+            ❌ Reject
+          </button>
+
+        `;
+
+        depositList.appendChild(card);
+
+      });
+
+    } catch (error) {
+
+      console.error(error);
+
+      depositList.innerHTML =
+        "<p>Deposit load করা যায়নি।</p>";
+    }
+  }
+
+
+  window.approveDeposit = async function(depositId) {
+
+    try {
+
+      const depositRef =
+        doc(db, "deposits", depositId);
+
+      const depositSnap =
+        await getDoc(depositRef);
+
+      if (!depositSnap.exists()) {
+
+        alert("Deposit পাওয়া যায়নি।");
+        return;
+      }
+
+
+      const deposit =
+        depositSnap.data();
+
+      const userRef =
+        doc(db, "users", String(deposit.telegramId));
+
+
+      await updateDoc(userRef, {
+
+        balance: increment(Number(deposit.amount || 0)),
+
+        totalDeposited:
+          increment(Number(deposit.amount || 0))
+
+      });
+
+
+      await updateDoc(depositRef, {
+
+        status: "approved"
+
+      });
+
+
+      alert("Deposit Approved হয়েছে।");
+
+      loadDeposits();
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert("Approve করা যায়নি।");
+
+    }
+
+  };
+
+
+  window.rejectDeposit = async function(depositId) {
+
+    try {
+
+      const depositRef =
+        doc(db, "deposits", depositId);
+
+
+      await updateDoc(depositRef, {
+
+        status: "rejected"
+
+      });
+
+
+      alert("Deposit Rejected হয়েছে।");
+
+      loadDeposits();
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert("Reject করা যায়নি.");
+
+    }
+
+  };
+
+
+  loadDeposits();
+
+</script>
+
+</body>
+</html>
