@@ -697,20 +697,6 @@ window.addEventListener("DOMContentLoaded", loadEarningsHistory);
 </div>
 
 <script>
-window.openDeposit = function() {
-  const depositPage = document.getElementById("depositPage");
-
-  if (!depositPage) return;
-
-  depositPage.style.display = "block";
-
-  const now = new Date();
-
-  document.getElementById("depositDateTime").textContent =
-    now.toLocaleDateString() + " " +
-    now.toLocaleTimeString();
-}
-
 function closeDeposit() {
   const depositPage = document.getElementById("depositPage");
 
@@ -719,10 +705,7 @@ function closeDeposit() {
   }
 }
 
-window.submitDeposit = function() {
-  const tg = window.Telegram.WebApp;
-  const user = tg.initDataUnsafe?.user;
-async function submitDeposit() {
+window.submitDeposit = async function () {
   const tg = window.Telegram.WebApp;
   const user = tg.initDataUnsafe?.user;
 
@@ -797,23 +780,7 @@ async function submitDeposit() {
     console.error(error);
     alert("Deposit Request জমা দেওয়া যায়নি।");
   }
-}
+};
 
-window.openDeposit = openDeposit;
-window.submitDeposit = submitDeposit;
-
-    alert("Deposit Request জমা দেওয়া যায়নি।");
-  }
-}
-
-window.openDeposit = openDeposit;
-window.submitDeposit = submitDeposit;
-
-</script>
-  
-  
-  
-</body>
-</html>
- 
-
+window.closeDeposit = closeDeposit;
+  </script>
