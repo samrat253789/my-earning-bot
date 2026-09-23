@@ -666,7 +666,7 @@ function confirmGrabOrder() {
 
 let currentGrabOrder = 1;
 
-function nextGrabOrder() {
+window.nextGrabOrder = function() {
   currentGrabOrder++;
 
   const page = document.getElementById("grabOrderPage");
