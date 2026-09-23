@@ -461,19 +461,208 @@ alert("Test Advertisement Completed! Reward: ৳5");
   }, 10000);
 }
 function startGrab() {
-  const workingCredit = 500;
-  const commissionRate = 3.5;
-  const commission = workingCredit * commissionRate / 100;
-  const newBalance = workingCredit + commission;
+  const grabPage = document.getElementById("grabOrderPage");
 
-  alert(
-    "🎯 VIP 0 — GRAB ORDER\n\n" +
-    "Working Credit: ৳" + workingCredit.toFixed(2) + "\n" +
-    "Commission Rate: " + commissionRate + "%\n" +
-    "Today's Commission: ৳" + commission.toFixed(2) + "\n" +
-    "After Earning: ৳" + newBalance.toFixed(2)
-  );
+  if (grabPage) {
+    grabPage.style.display = "block";
+    return;
+  }
+
+  const page = document.createElement("div");
+  page.id = "grabOrderPage";
+  page.style.cssText = `
+    position: fixed;
+    inset: 0;
+    background: #0b1020;
+    color: white;
+    z-index: 9999;
+    padding: 25px 18px;
+    overflow-y: auto;
+  `;
+
+  page.innerHTML = `
+    <div style="max-width:480px;margin:auto;">
+
+      <div style="font-size:24px;font-weight:bold;margin-bottom:25px;">
+        🎯 Grab Order
+      </div>
+
+      <div style="
+        background:#151e35;
+        border:1px solid #263454;
+        border-radius:20px;
+        padding:22px;
+      ">
+
+        <div style="
+          color:#20d46b;
+          font-size:18px;
+          font-weight:bold;
+          margin-bottom:20px;
+        ">
+          Order 1 / 30
+        </div>
+
+        <div style="color:#9ba5bd;font-size:14px;">
+          Order Amount
+        </div>
+
+        <div style="
+          font-size:32px;
+          font-weight:bold;
+          margin:8px 0 20px;
+        ">
+          ৳35.00
+        </div>
+
+        <div style="color:#9ba5bd;font-size:14px;">
+          Commission Rate
+        </div>
+
+        <div style="
+          font-size:20px;
+          font-weight:bold;
+          margin-top:6px;
+        ">
+          3.5%
+        </div>
+
+        <div style="color:#9ba5bd;font-size:14px;margin-top:18px;">
+          Commission
+        </div>
+
+        <div style="
+          color:#20d46b;
+          font-size:25px;
+          font-weight:bold;
+          margin-top:6px;
+        ">
+          ৳1.23
+        </div>
+
+        <button
+          onclick="confirmGrabOrder()"
+          style="
+            width:100%;
+            margin-top:25px;
+            border:none;
+            background:#20d46b;
+            color:#06130b;
+            font-weight:bold;
+            padding:14px;
+            border-radius:12px;
+            font-size:16px;
+          "
+        >
+          ✅ CONFIRM ORDER
+        </button>
+
+      </div>
+
+      <button
+        onclick="document.getElementById('grabOrderPage').remove()"
+        style="
+          width:100%;
+          margin-top:15px;
+          padding:13px;
+          border:1px solid #263454;
+          background:#151e35;
+          color:white;
+          border-radius:12px;
+        "
+      >
+        ← Back
+      </button>
+
+    </div>
+  `;
+
+  document.body.appendChild(page);
 }
+function confirmGrabOrder() {
+  const page = document.getElementById("grabOrderPage");
+
+  if (!page) return;
+
+  page.innerHTML = `
+    <div style="
+      max-width:480px;
+      margin:auto;
+      padding-top:40px;
+      text-align:center;
+    ">
+
+      <div style="
+        background:#151e35;
+        border:1px solid #263454;
+        border-radius:20px;
+        padding:30px 20px;
+      ">
+
+        <div style="font-size:50px;">✅</div>
+
+        <div style="
+          font-size:24px;
+          font-weight:bold;
+          margin-top:15px;
+        ">
+          Order Completed
+        </div>
+
+        <div style="
+          color:#9ba5bd;
+          margin-top:20px;
+        ">
+          Commission Earned
+        </div>
+
+        <div style="
+          color:#20d46b;
+          font-size:30px;
+          font-weight:bold;
+          margin-top:6px;
+        ">
+          ৳1.23
+        </div>
+
+        <div style="
+          color:#9ba5bd;
+          margin-top:20px;
+        ">
+          Grab Progress
+        </div>
+
+        <div style="
+          font-size:22px;
+          font-weight:bold;
+          margin-top:5px;
+        ">
+          1 / 30
+        </div>
+
+        <button
+          onclick="startGrab()"
+          style="
+            width:100%;
+            margin-top:25px;
+            border:none;
+            background:#20d46b;
+            color:#06130b;
+            font-weight:bold;
+            padding:14px;
+            border-radius:12px;
+            font-size:16px;
+          "
+        >
+          🎯 NEXT ORDER
+        </button>
+
+      </div>
+
+    </div>
+  `;
+}
+window.startGrab = startGrab;
 
 window.startGrab = startGrab;
     function openReferral() {
