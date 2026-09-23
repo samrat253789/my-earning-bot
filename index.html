@@ -268,17 +268,31 @@ if (todayElement) {
     </div>
 
     <div class="balance-card">
-      <div class="balance-title">Available Balance</div>
-      <div class="balance" id="balance">৳0.00</div>
-     <div class="today" id="todayEarnings">Today: ৳0.00</div>
-    </div>
-    <div class="level-card">
-  <div class="level-title">🆓 LEVEL 0 — FREE</div>
-  <div class="level-info">Daily Ads: <b>1</b></div>
-  <div class="level-info">Reward: <b>৳5 / Ad</b></div>
-  <div class="level-info">Daily Maximum: <b>৳5</b></div>
+      <div class="level-card">
+  <div class="level-title">🆓 VIP 0 — FREE</div>
+
+  <div class="level-info">
+    Working Credit: <b>৳500</b>
+  </div>
+
+  <div class="level-info">
+    Grab Orders: <b id="grabProgress">0 / 30</b>
+  </div>
+
+  <div class="level-info">
+    Today's Commission: <b id="todayCommission">৳0.00</b>
+  </div>
+
+  <div class="level-info">
+    Withdrawal Limit: <b>৳500</b>
+  </div>
+
   <div class="level-status">🟢 ACTIVE</div>
-  <button class="start-btn" onclick="startTask()">▶ Watch Ad</button>
+
+  <button class="start-btn" onclick="startGrab()">
+    🎯 GRAB NOW
+  </button>
+</div>
 </div>
 <div class="section-title">📜 Earnings History</div>
 
@@ -446,7 +460,22 @@ alert("Test Advertisement Completed! Reward: ৳5");
     }
   }, 10000);
 }
+function startGrab() {
+  const workingCredit = 500;
+  const commissionRate = 3.5;
+  const commission = workingCredit * commissionRate / 100;
+  const newBalance = workingCredit + commission;
 
+  alert(
+    "🎯 VIP 0 — GRAB ORDER\n\n" +
+    "Working Credit: ৳" + workingCredit.toFixed(2) + "\n" +
+    "Commission Rate: " + commissionRate + "%\n" +
+    "Today's Commission: ৳" + commission.toFixed(2) + "\n" +
+    "After Earning: ৳" + newBalance.toFixed(2)
+  );
+}
+
+window.startGrab = startGrab;
     function openReferral() {
   
   const user = tg.initDataUnsafe?.user;
